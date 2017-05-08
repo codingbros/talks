@@ -1,0 +1,141 @@
+/**
+ * Codingbros theme for reveal.js. forked by Sky-Theme
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+
+// Include theme-specific fonts
+@import url(https://fonts.googleapis.com/css?family=Quicksand:400,700,400italic,700italic);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+
+
+// Override theme settings (see ../template/settings.scss)
+$mainFont: 'Open Sans', sans-serif;
+$mainColor: #333;
+$headingFont: 'Quicksand', sans-serif;
+$headingColor: #333;
+$headingLetterSpacing: -0.08em;
+$headingTextShadow: none;
+$backgroundColor: #f7fbfc;
+$linkColor: #3b759e;
+$linkColorHover: lighten( $linkColor, 20% );
+$selectionBackgroundColor: #134674;
+
+// Fix links so they are not cut off
+.reveal a {
+	line-height: 1.3em;
+}
+
+/*// Background generator
+@mixin bodyBackground() {
+	@include radial-gradient( #add9e4, #f7fbfc );
+}*/
+
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+// Codingbros specifics ------------------------
+
+$footerbar-height: 30px;
+$codingbros-logo-height: 26px;
+$custom-sidemargin: 24px;
+$main-background: darken(lightblue, 10%);
+
+// move progress bar up to make space for footer bar
+.progress {
+	bottom: $footerbar-height !important;
+	height: 5px !important;
+}
+
+.controls {
+	bottom: $footerbar-height + 10px !important;
+}
+
+section {
+	font-size: 0.8em !important;
+}
+
+.footerbar {
+	display: block;
+	height: $footerbar-height;
+	vertical-align: baseline;
+	width: 100%;
+
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+
+	background-color: rgba(0,0,0,0.2);
+	p {
+		float: right;
+		font-family: $mainFont;
+		font-size: 1.2em;
+		font-style: italic;
+		
+		vertical-align: middle;
+		text-align: center;
+		line-height: $footerbar-height;
+		margin: 0 $custom-sidemargin;
+		
+	}
+	img {
+		height:$codingbros-logo-height;
+		float:left;
+		margin: ($footerbar-height/2.0)-($codingbros-logo-height/2.0) $custom-sidemargin;
+	}
+}
+
+.codingbros-slideheader {
+	font-family: $headingFont !important;
+	font-size: 50px !important;
+	position: absolute;
+	top: 50px;
+	left: 100px;
+	z-index: 500;
+}
+
+.reveal section img.dropped {
+	border: 0;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.reveal section img.blocked {
+	border: 0;
+	box-shadow: none;
+	margin: 0 30px;
+	background: transparent !important;
+}
+
+//particle system
+
+#particles-js {
+	background: $main-background;
+	display: block;
+	vertical-align: bottom;
+	width: 100vw;
+	min-height: 100vh;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed
+}
+
+#particles-js .particles-js-canvas-el {
+	width: 100vw !important;
+	height: 100vh !important
+}
+
+// ---------------------------------------------
