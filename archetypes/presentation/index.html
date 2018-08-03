@@ -1,0 +1,330 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Maven Archetypes</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/codingbros.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+    <style>
+        /*FIXME - Notes function is not well formatted. Press 'b' Button to see.*/
+        .header1 header:after {
+            content: "Table of Contents";
+        }
+
+        .header2 header:after {
+            content: "What is a Maven archetype?";
+        }
+
+        .header3 header:after {
+            content: "Create a custom Maven archetype";
+        }
+
+        .header4 header:after {
+            content: "Rest-Taskforce reference archetype";
+        }
+
+        .header5 header:after {
+            content: "Outlook";
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div id="particles-js">
+        <canvas class="particles-js-canvas-el" style="width: 100%; height: 100%;"></canvas>
+    </div>
+    <header class="codingbros-slideheader"></header>
+    <div class="slides">
+        <section data-transition="zoom">
+            <h1>Archetypes</h1>
+            <h3>Maven - Templating Toolkit</h3>
+
+            <div> <!--<FIXME - should be done in css by own theme-class-->
+                <br>
+                <br>
+                <img class="blocked" src="img/maven-logo-black-on-white.png" height="60">
+                <img class="blocked" src="img/intellij-logo.png" height="60"/>
+				<img class="blocked" src="img/java-logo.png" height="60"/>
+				<img class="blocked" src="img/spring-logo.png" height="60"/>
+            </div>
+
+        </section>
+        <section data-transition="convex" data-state="header1">
+            <!--Inhaltsverzeichnis-->
+            <ul>
+                <li class="fragment">
+                    <a href="#aboutarchetypes">What is a Maven archetype?</a>
+                </li>
+                <li class="fragment">
+                    <a href="#createarchetypes">Create a custom Maven archetype</a>
+                </li>
+				<li class="fragment">
+                    <a href="#restarchetype">Rest-Taskforce reference archetype</a>
+                </li>
+                <li class="fragment">
+                    <a href="#more">Outlook</a>
+                </li>
+            </ul>
+        </section>
+        <section id="aboutarchetypes" data-transition="convex" data-state="header2">
+            <section>
+				<h3>What is in a maven project ?</h3>
+				<img src="img/maven/structure.png"/>
+			</section>
+            <section>
+                <blockquote>Maven archetype is a template used to create a skeleton app to build on.</blockquote>
+            </section>
+            <section>
+                <h3>Structure</h3>
+				<div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+					<img src="img/maven/archetype_structure_plain.png"/>
+					<div class="fragment" style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+					<img class="blocked" src="img/arrow_right.png" height="70px"/>
+					
+					<img src="img/maven/structure.png"/>
+					</div>
+				</div>
+            </section>
+			<section>
+                <h3>archetype-metadata.xml</h3>
+				<pre><code class="xml"><archetype-descriptor>
+  <requiredProperties>
+    {...}
+  </requiredProperties>
+
+  <fileSets>
+    {...}
+  </fileSets>
+
+  <modules>
+    {...}
+  </modules>
+</archetype-descriptor></code></pre>
+			<p>See: <a href="https://maven.apache.org/archetype-archives/archetype-2.1/archetype-models/archetype-descriptor/archetype-descriptor.html">archetype-descriptor.html</a></p>
+            </section>
+			<section>
+                <h3>archetype-metadata.xml</h3>
+				<p>requiredProperties</p> 
+				<pre><code class="xml"><requiredProperties>
+   <requiredProperty key="version">
+       <defaultValue>1.0.0-SNAPSHOT</defaultValue>
+       <!--project should always start by semantic versioned versionnumber + snapshot.-->
+       <validationRegex>^(\d+\.)(\d+\.)(\d+)(-SNAPSHOT)$</validationRegex>
+   </requiredProperty>
+</requiredProperties>
+</code></pre>
+            </section>
+			<section>
+                <h3>archetype-metadata.xml</h3>
+				<p>fileSets</p> 
+				<pre><code class="xml"><fileSet filtered="false" encoding="UTF-8">
+    <directory></directory>
+    <includes>
+        <include>__gitignore__</include>
+        <include>__Jenkinsfile__</include>
+    </includes>
+</fileSet>
+<fileSet filtered="true">
+    <directory>src/main/java/__packageInPathFormat__</directory>
+    <includes>
+        <include>**/*.java</include>
+    </includes>
+</fileSet>
+</code></pre>
+            </section>
+			<section>
+                <h3>archetype-metadata.xml</h3>
+				<p>modules</p> 
+				<pre><code class="xml"><modules>
+  <module id=.. dir=.. name=.. >
+
+    <fileSets>
+      <fileSet filtered=.. packaged=.. encoding=.. >
+        <directory/>
+        <includes/>
+        <excludes/>
+      </fileSet>
+    </fileSets>
+
+    <modules>
+      <module>...recursion...<module>
+    </modules>
+  </module>
+</modules>
+</code></pre>
+            </section>
+        </section>
+        <section id="createarchetypes" data-transition="convex" data-state="header3">
+            <section>
+                <h3>Archetype to generate an archetype ???</h3>
+                <img class="blocked" src="img/yodawg.jpg"/>
+            </section>
+            <section>
+                <h3>How ?</h3>
+				<table>
+					<tr class="fragment">
+						<td>
+							<b>archetypeGroupId</b>
+						</td>
+						<td>
+							org.apache.maven.archetypes
+						</td>
+					</tr>
+					<tr class="fragment">
+						<td>
+							<b>archetypeArtifactId</b>
+						</td>
+						<td>
+							maven-archetype-archetype
+						</td>
+					</tr>
+					<tr class="fragment">
+						<td>
+							<b>archetypeVersion</b>
+						</td>
+						<td>
+							1.3 (or newer)
+						</td>
+					</tr>
+				</table>
+                <pre class="fragment"><code class="xml">mvn archetype:generate 
+-DarchetypeGroupId=org.apache.maven.archetypes 
+-DarchetypeArtifactId=maven-archetype-archetype 
+-DarchetypeVersion=1.3</code></pre>
+				<div class="fragment">
+					<h3>Or</h3>
+					<img class="blocked" src="img/intellij-logo.png" height="60"/>
+					<img class="blocked" src="img/eclipse-logo.png" height="60"/>
+				</div>	
+            </section>
+			<section>
+                <img class="blocked" src="img/demo.jpg"/>
+            </section>
+            <section>
+                <img class="dropped" src="img/maven/process.png" />
+            </section>
+        </section>
+		
+		<section id="restarchetype" data-state="header4" data-transition="convex">
+			<section>
+				<h3>DCC Rest Archetype</h3>
+				<table class="fragment">
+					<tr>
+						<td>
+							<b>archetypeGroupId</b>
+						</td>
+						<td>
+							com.onea****etype
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>archetypeArtifactId</b>
+						</td>
+						<td>
+							rest-archetype
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<b>archetypeVersion</b>
+						</td>
+						<td>
+							1.0.0-SNAPSHOT
+						</td>
+					</tr>
+	
+				</table>
+				<div class="fragment">
+					<p>Maven</p>
+					<pre><code class="xml">mvn archetype:generate 
+-DarchetypeGroupId=com.one****
+-DarchetypeArtifactId=rest-archetype
+-DarchetypeVersion=1.0.0-SNAPSHOT <!--will be released soon&trade;-->
+-DdeveloperName=****
+-DdeveloperMail=**** 
+-DdeveloperId=****</code></pre>
+				</div>
+				<div class="fragment">
+					<p>mvnj</p>	
+					<pre><code class="xml">mvnj -g rest-archetype 1.0.0-SNAPSHOT</code></pre>
+				</div>
+			</section>
+            <section>
+				<h3>Time for a Demo!</h3>
+				<img src="img/demo2.jpg" height="400px"/>
+            </section>
+        </section>
+        <section id="more" data-transition="convex">
+            <section data-background="img/holy.gif"/></section>
+			<section data-state="header5">
+				<a><h3>DCC Initializr</h3>
+				<img src="img/initializr.png"/></a>
+			</section>
+        </section>
+        <section>
+		<section data-transition="convex">
+            <h3>Questions ?? </h3>
+            <img src="img/questions.jpg" height="450"/>
+        </section>
+		<section data-state="blibla">
+			<p style="font-size: 7em !important; font-style:italic; font-family: 'Edwardian Script ITC' !important; color:white !important">Fin</p>
+			<img class="blocked fragment" data-autoslide="3000" src="img/fin.gif" height="200px"/>
+			<img class="blocked fragment" data-autoslide="3000" src="img/fin.gif" height="200px"/>
+			<img class="blocked fragment" data-autoslide="3000" src="img/fin.gif" height="200px"/>
+		</section>
+		</section>
+    </div>
+</div>
+
+
+
+<div class="footerbar">
+	<!--FIXME - Coding Bros Logo Margin-Top + ProgessBar Height -->
+    <!--FIXME - images sizes should only be as big as needed-->
+    <a target="_blank" href="http://codingbros.io" ><img src="img/codingbros_logo.png"/></a>
+    <p>Tobias Spindler</p>
+</div>
+<script src="js/particles/particles.min.js"></script>
+<script src="js/particles/main.js"></script>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+// More info https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+history: true,
+
+// More info https://github.com/hakimel/reveal.js#dependencies
+dependencies: [
+{src: 'plugin/markdown/marked.js'},
+{src: 'plugin/markdown/markdown.js'},
+{src: 'plugin/notes/notes.js', async: true},
+{
+src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+hljs.initHighlightingOnLoad();
+}
+}
+]
+});
+</script>
+</body>
+</html>
